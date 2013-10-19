@@ -20,7 +20,7 @@ _TODO_
 ### Formalization of 'Observable Sequence' definition
 Rx is based on the Observer design pattern, however it further extends the pattern from just a simple callback model to an observable sequence paradigm.
 
-The Observer pattern allows for zero-or-more observers(consumers) to subscribe to receive callbacks(values) from the observable subject(producer). The observers are able unsubscribe from receiving callbacks and the observable subject may produce zero or more callbacks.   
+The Observer pattern allows for zero-or-more observers(consumers) to subscribe to receive callbacks(values) from the observable subject(producer). The observers are able un-subscribe from receiving callbacks and the observable subject may produce zero or more callbacks.   
 
 The Observer pattern provides a useful base from which to start, however it fails to cater for concurrency concerns, finite event sources and failure scenarios. 
 
@@ -58,13 +58,20 @@ Concurrent combinators will subscribe to multiple sequences at the same time. Th
 Pairing operators will ensure that values from two sequences are returned together as pairs. `Zip` will return the first values from each sequence as a pair, then the second sequence as a pair and so on. `CombineLatest` will return the most recent values from each sequence as a pair. This allows for sequence to produce values at different rates. 
 
 ### Concurrency
-	Serialization, Timers, 
+_TODO_
+	
+Serialization 
+
+Timers 
 
 ### Testing
 With the introduction of concurrency operators, testability could be compromised. Rx addresses this by allowing the substitution of `Scheduler` instances with `TestSchedulers` that all you to emulate the concurrent nature of your code with *virtual time* while your tests remain single threaded and deterministic.  
 
 ### What is Linq
+[Linq](http://en.wikipedia.org/wiki/Language_Integrated_Query "Linq (Wikipedia)") has been one of the key building blocks that made the original implementation of Rx shine. By extending .NET to more easily embrace functional programming and fluent interfaces, the ability to query was built into the framework. Initially Linq was most popular as a method to query data at rest i.e. Collections, XML or Databases. Rx adopted the same features, but instead offered the ability to query data in motion.
 
+As JavaScript is a prototype language with functions as a first class type, adopting a Linq style API is relatively easy (compared to Java for instance). 
+ 
 
 ## Types
 
