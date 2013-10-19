@@ -10,7 +10,7 @@ RxJs is the JavaScript implementation of Rx. There are numerous other implementa
 
 ## Usages
 
-RxJs
+_TODO_
 
 
  
@@ -33,7 +33,7 @@ With the concept of an Observable Sequence, a far richer platform is created. In
 
 
 ### Transformation
-An Observable Sequence may not always produce value in the form you wish to consume it in. Rx provides ways to Transform data from one form to another.
+An Observable Sequence may not always produce value in the form you wish to consume it in. Rx provides ways to transform data from one form to another.
 
 #### One to one 
 Using the `select` operator, values can be mapped from one value to another. You may need to reduce a complex type like a `customer` to just the `customerId`. Alternatively you may enrich a simple type like `customerId` to a `customer` object.
@@ -51,6 +51,11 @@ Rx allows multiple sequences to be combined. Sequences can be combined in many f
  - Concurrently : Amb, Merge, Switch
  - Pairing : CombineLatest, Zip, And-Then-When
 
+Sequential combinators will process a sequence until it completes, and then subscribe to the next sequence as defined by the operator.
+
+Concurrent combinators will subscribe to multiple sequences at the same time. The `Amb` operator will only return values from the sequence that is first to produce a value(callback). `Merge` will return all values from all sequences, flattened into a single output sequence. `Switch` allows you to consume an observable sequence of observable sequences, also referred to as nested sequences.
+
+Pairing operators will ensure that values from two sequences are returned together as pairs. `Zip` will return the first values from each sequence as a pair, then the second sequence as a pair and so on. `CombineLatest` will return the most recent values from each sequence as a pair. This allows for sequence to produce values at different rates. 
 
 ### Concurrency
 	Serialization, Timers, 
