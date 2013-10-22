@@ -57,6 +57,8 @@ Concurrent combinators will subscribe to multiple sequences at the same time. Th
 
 Pairing operators will ensure that values from two sequences are returned together as pairs. `Zip` will return the first values from each sequence as a pair, then the second sequence as a pair and so on. `CombineLatest` will return the most recent values from each sequence as a pair. This allows for sequence to produce values at different rates. 
 
+### Query
+
 ### Concurrency
 _TODO_
 	
@@ -72,6 +74,30 @@ With the introduction of concurrency operators, testability could be compromised
 
 As JavaScript is a prototype language with functions as a first class type, adopting a Linq style API is relatively easy (compared to Java for instance). 
  
+The key features of Linq brings to a language or API include:
+#### Unitive
+ 
+Linq unifies a querying language that can target numerous data sources: Objects/Collections, SQL, XML and event data sources.
+Linq not only unifies querying across data sources, but also across languages.
+Linq has been ported from .NET (C#, VB.NET, F# etc) to C++, Python, Java and also JavaScript.
+
+#### Extensible
+
+You can extend Rx with your own custom query operators (extension methods).
+
+#### Declarative
+
+LINQ allows your code to read as a declaration of _what_ your code does and leaves the _how_ to the implementation of the operators.
+
+#### Composable
+
+By embracing a functional programming concepts like anon functions and fluent interfaces, Linq provides a way to compose operators together to create complex queries from simple operators.
+            
+#### Transformative
+
+Queries can transform their data from one type to another. 
+A query might translate a single value to another value, aggregated from a sequence of values to a single average value or expand a single data value into a sequence of values.
+
 
 ## Types
 
