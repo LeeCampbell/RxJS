@@ -10,7 +10,20 @@ RxJs is the JavaScript implementation of Rx. There are numerous other implementa
 
 ## Usages
 
-_TODO_
+RxJs is perfect for transforming, querying or transforming creating queries over asynchronous data streams as observable sequences. 
+These sequences could have a single value, many values or even an infinite stream of data.
+
+ * **Single Value Sequences** : web request, reading a files contents asynchronously, an asynchronous computation or another type of promise.
+ * **Many value sequences** : a list of twitter followers, images from a web page, chat messages.
+ * **Infinite sequences** : timers (`Observable.interval`), DOM events, tweets, instrumentation, geolocation events.
+
+In this case, an infinite sequence is just where the source observable would never complete.
+
+Usage of RxJs is equally relevant on the server applications as it is in GUI applications.
+RxJs can be used in the GUI to provide responsive applications that animate, react to user events such as layout changes or key presses. 
+See the [examples](https://github.com/Reactive-Extensions/RxJS/tree/master/examples) to see how to create [Autocomplete](https://github.com/Reactive-Extensions/RxJS/tree/master/examples#autocomplete "Autocomplete example") textboxes, [Image Croppers](https://github.com/Reactive-Extensions/RxJS/tree/master/examples#image-cropper), [Drag and Drop](https://github.com/Reactive-Extensions/RxJS/tree/master/examples#drag-and-drop) and more.
+It is also easy to conceive of scenarios where non-GUI code can leverage RxJs, such as aggregating twitter feeds, querying live logs or [wrapping existing asynchronous APIs](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/howdoi/wrap.md). 
+RxJs even supplies a NodeJs bridge to allow you to use RxJs purely on the server-side.
 
 
  
@@ -33,11 +46,15 @@ An observable sequence can be formalized as :
 
 With the concept of an Observable Sequence, a far richer platform is created. 
 Instead on thinking of just callbacks, one can consider a sequence of values produced over time. 
-These sequences can be Transformed and Composed.
+These sequences can be transformed and queried.
+Sequences can also be composed of other sequences.
+Custom operators can be created to extend the provided (query, transformation & composition) operators.
+By allowing both sequences and queries to be composed, Rx becomes a rich and powerful way to query event sources and asynchronous data flows.
 
 
 ### Transformation
-An Observable Sequence may not always produce value in the form you wish to consume it in. Rx provides ways to transform data from one form to another.
+An Observable Sequence may not always produce value in the form you wish to consume it in. 
+Rx provides ways to transform data from one form to another.
 
 #### One to one 
 Using the `select` operator, values can be mapped from one value to another. 
@@ -84,7 +101,7 @@ Timers
 With the introduction of concurrency operators, testability could be compromised. 
 Rx addresses this by allowing the substitution of `Scheduler` instances with `TestSchedulers` that all you to emulate the concurrent nature of your code with *virtual time* while your tests remain single threaded and deterministic.  
 
-
+### Cancellation
 
 ## Types
 
