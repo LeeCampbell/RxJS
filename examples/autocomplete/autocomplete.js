@@ -1,25 +1,25 @@
-(function (global, undefined) {
+(function (global, $, undefined) {
 
     // Search Wikipedia for a given term
-    function searchWikipedia(term) {
-        var cleanTerm = global.encodeURIComponent(term);
-        var url = 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search='
-            + cleanTerm + '&callback=JSONPCallback';
-        return Rx.DOM.Request.jsonpRequestCold(url);
-    }
-
-    function clearChildren (element) {
-        while (element.firstChild) {
-            element.removeChild(element.firstChild);
-        }                
+    function searchWikipedia (term) {
+        var promise = $.ajax({
+            url: 'http://en.wikipedia.org/w/api.php',
+            dataType: 'jsonp',
+            data: {
+                action: 'opensearch',
+                format: 'json',
+                search: encodeURI(term)
+            }
+        }).promise();
+        return Rx.Observable.fromPromise(promise);
     }
 
     function main() {
-        var input = document.querySelector('#textInput'),
-            results = document.querySelector('#results');
+        var $input = $('#textInput'),
+            $results = $('#results');
 
         // Get all distinct key up events from the input and only fire if long enough and distinct
-        var keyup = Rx.DOM.fromEvent(input, 'keyup')
+        var keyup = Rx.Observable.fromEvent($input, 'keyup')
             .map(function (e) {
                 return e.target.value; // Project the text from the input
             })
@@ -29,36 +29,30 @@
             .throttle(750 /* Pause for 750ms */ )
             .distinctUntilChanged(); // Only if the value has changed
 
-        var searcher = keyup.map(
+        var searcher = keyup.flatMapLatest(
             function (text) { 
                 return searchWikipedia(text); // Search wikipedia
-            })
-            .switchLatest(); // Ensure no out of order results
+            });
 
         var subscription = searcher.subscribe(
             function (data) {
-                // Append the results
-                clearChildren(results);
-
                 var res = data[1];
 
-                var i, len, li;
-                for(i = 0, len = res.length; i < len; i++) {
-                    li = document.createElement('li');
-                    li.innerHTML = res[i];
-                    results.appendChild(li); 
-                }
+                // Append the results
+                $results.empty();
+
+                $.each(res, function (_, value) {
+                    $('<li>' + value + '</li>').appendTo(results);
+                });
             }, 
             function (error) {
                 // Handle any errors
-                clearChildren(results);
+                $results.empty();
 
-                var li = document.createElement('li');
-                li.innerHTML = 'Error: ' + error;
-                results.appendChild(li);
+                $('<li>Error: ' + error + '</li>').appendTo(results);
             });
     }
 
     main();
 
-}(window));
+}(window, jQuery));
