@@ -10,7 +10,7 @@ RxJs is the JavaScript implementation of Rx. There are numerous other implementa
 
 ## Usages
 
-RxJs is perfect for transforming, querying or transforming creating queries over asynchronous data streams as observable sequences. 
+RxJs is perfect for transforming, composing or querying asynchronous data streams as observable sequences. 
 These sequences could have a single value, many values or even an infinite stream of data.
 
  * **Single Value Sequences** : web request, reading a files contents asynchronously, an asynchronous computation or another type of promise.
@@ -21,12 +21,9 @@ In this case, an infinite sequence is just where the source observable would nev
 
 Usage of RxJs is equally relevant on the server applications as it is in GUI applications.
 RxJs can be used in the GUI to provide responsive applications that animate, react to user events such as layout changes or key presses. 
-See the [examples](https://github.com/Reactive-Extensions/RxJS/tree/master/examples) to see how to create [Autocomplete](https://github.com/Reactive-Extensions/RxJS/tree/master/examples#autocomplete "Autocomplete example") textboxes, [Image Croppers](https://github.com/Reactive-Extensions/RxJS/tree/master/examples#image-cropper), [Drag and Drop](https://github.com/Reactive-Extensions/RxJS/tree/master/examples#drag-and-drop) and more.
-It is also easy to conceive of scenarios where non-GUI code can leverage RxJs, such as aggregating twitter feeds, querying live logs or [wrapping existing asynchronous APIs](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/howdoi/wrap.md). 
+See the [examples](../../examples) to see how to create [Autocomplete](../../examples#autocomplete "Autocomplete example") textboxes, [Image Croppers](../../examples#image-cropper), [Drag and Drop](../../examples#drag-and-drop) and more.
+It is also easy to conceive of scenarios where non-GUI code can leverage RxJs, such as aggregating twitter feeds, querying live logs or [wrapping existing asynchronous APIs](../howdoi/wrap.md). 
 RxJs even supplies a NodeJs bridge to allow you to use RxJs purely on the server-side.
-
-
- 
 
 ## Guidelines and Patterns
 
@@ -44,29 +41,31 @@ An observable sequence can be formalized as :
 > A sequence of zero or more values, that optionally terminates. 
 > A sequence can terminate either with or without an error.
 
-With the concept of an Observable Sequence, a far richer platform is created. 
+With the concept of an *observable sequence*, a far richer platform is created. 
 Instead on thinking of just callbacks, one can consider a sequence of values produced over time. 
 These sequences can be transformed and queried.
 Sequences can also be composed of other sequences.
 Custom operators can be created to extend the provided (query, transformation & composition) operators.
-By allowing both sequences and queries to be composed, Rx becomes a rich and powerful way to query event sources and asynchronous data flows.
+By allowing both sequences and operators to be composed, Rx becomes a rich and powerful way to query event sources and asynchronous data flows.
 
 
 ### Transformation
-An Observable Sequence may not always produce value in the form you wish to consume it in. 
+An observable sequence may not always produce value in the form you wish to consume it. 
 Rx provides ways to transform data from one form to another.
 
 #### One to one 
 Using the `select` operator, values can be mapped from one value to another. 
 You may need to reduce a complex type like a `customer` to just the `customerId`. Alternatively you may enrich a simple type like `customerId` to a `customer` object.
+Users of other functional languages might recognise the `select` operator as an equivalent to a *map* operator.
 
 #### One to many
-Some values from an Observable Sequence can be mapped to many values. 
-For example using the `selectMany` operator, a sequence of twitter account values may be mapped to a sequence of tweets.   
+Some values from an observable sequence can be mapped to many values. 
+For example using the `selectMany` operator, a sequence of twitter account values may be mapped to a sequence of tweets. If the sequence of accounts had three values and each account had 4 tweets, the result sequence would be a single sequence of 12 tweets.
+This is analogous to a *flatMap* operator in other APIs.   
 
 #### Many to one
 Some sequences of values are more useful when they are aggregate many values into one value. 
-For example a count of Tweets over a period of time, the sum of transactions, or perhaps the average price for a product. 
+For example; a count of tweets over a period of time, the sum of transactions, or perhaps the average price for a product. 
 
 ### Composition
 Rx allows multiple sequences to be combined. 
@@ -84,24 +83,45 @@ The `Amb` operator will only return values from the sequence that is first to pr
 `Switch` allows you to consume an observable sequence of observable sequences, also referred to as nested sequences.
 
 Pairing operators will ensure that values from two sequences are returned together as pairs. 
-`Zip` will return the first values from each sequence as a pair, then the second sequence as a pair and so on. 
+`Zip` will return the first values from each sequence as a pair, then the second values from each sequence as a pair and so on. 
 `CombineLatest` will return the most recent values from each sequence as a pair. 
 This allows for sequence to produce values at different rates. 
 
 ### Query
 
-### Concurrency
-_TODO_
-	
-Serialization 
+There are query operators that will allow you to filter and group results.
+The `where` clause allows you to filter out values with a provided predicate.
+The `skip` and `take` operators allow you to ignore initial or trailing values of a sequence. 
+You can also group data (using `groupBy`) or get distinct values (using `distinct` and `distinctUntil`).
 
-Timers 
+
+### Concurrency
+While an an asynchronous API like RxJs can work without concurrency, it is a useful concern to control. 
+As JavaScript implementations can adopt concurrent or multi-threaded environments, RxJs caters for this by providing Schedulers.
+Schedulers enable you to queue a function to be performed on a known context.
+This allows units of work to either be queued for execution asynchronously on the current thread. 
+In a multi threaded environment, work can be queued to be run concurrently on another thread of execution.  
+	
+In some platforms, the introduction of concurrency can create a non-deterministic program.
+RxJs avoids this by ensuring that its scheduler implementations are serialized.
+This means that all of your work allocated to a scheudler will be processed in a serialised fashion.
+This proves to be a safe way to construct programs and aids in the ability to rationalise and debug software.  
+
+RxJs provides implementations to execute work based at a given time or at a given period.
+This provides an excellent way to buffer values, determine timeouts or instantiate work at a given at a point in the future.
+
 
 ### Testing
 With the introduction of concurrency operators, testability could be compromised. 
-Rx addresses this by allowing the substitution of `Scheduler` instances with `TestSchedulers` that all you to emulate the concurrent nature of your code with *virtual time* while your tests remain single threaded and deterministic.  
+Rx addresses this by allowing the substitution of `Scheduler` instances with `TestSchedulers` that all you to emulate the concurrent nature of your code with *virtual time* while your tests remain single threaded and deterministic. 
+ 
 
 ### Cancellation
+Cancellation is baked into to Rx.
+Subscriptions to any observable sequence can be disposed (un-subscribed) which will avoid any future callbacks.
+Additionally the cancellation will be issued to the observable sequence so that it may stop any IO or CPU bound work it was performing. 
+
+### Custom operators
 
 ## Types
 
