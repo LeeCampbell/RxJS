@@ -4,7 +4,7 @@ Reactive Extensions (Rx) is a library for composing asynchronous and event-based
 
 RxJs is the JavaScript implementation of Rx. There are numerous other implementations targeting Python, C++, Java and the original implementation targeting .NET.
 
-<TODO Put TOC here />
+TODO Put TOC here
 
 
 
@@ -123,8 +123,11 @@ Additionally the cancellation will be issued to the observable sequence so that 
 
 ### Custom operators
 
-## Types
+TODO
 
+
+## Types
+TODO
 
 ## History of Rx
 
@@ -150,7 +153,7 @@ Linq is based on several key concepts:
  
 Linq unifies a querying language that can target numerous data sources: Objects/Collections, SQL, XML and event data sources.
 Linq not only unifies querying across data sources, but also across languages.
-Linq has been ported from .NET (C#, VB.NET, F# etc) to C++, Python, Java and also JavaScript.
+Linq has been ported from .NET (C#, VB.NET, F# etc.) to C++, Python, Java and also JavaScript.
 
 #### Extensible
 
